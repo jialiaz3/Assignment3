@@ -8,6 +8,57 @@
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.12.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+        //Bucket Configurations
+        var bucketName = "hw3b2";
+        var bucketRegion = 'us-east-1';
+        var IdentityPoolId = "us-east-1:389eacbe-7537-498b-977d-f1d92f80cc11";
+
+        AWS.config.update({
+            region: bucketRegion,
+            credentials: new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: IdentityPoolId
+            })
+        });
+
+        var s3 = new AWS.S3({
+            apiVersion: '2006-03-01',
+            params: {Bucket: bucketName}
+        });
+    </script>
+    <script type="text/javascript">
+        function s3upload() {
+            var files = document.getElementById('fileUpload').files;
+            if (files)
+            {
+                var file = files[0];
+                var fileName = file.name;
+                var filePath = fileName;
+                // var fileUrl = 'https://' + bucketRegion + '.amazonaws.com/hw3b2.s3.amazonaws.com/' +  filePath;
+                var fileUrl = filePath;
+                s3.upload({
+                    Key: filePath,
+                    Body: file,
+                    ACL: 'public-read'
+                }, function(err, data) {
+                    if(err) {
+                        reject('error');
+                    }
+                    alert('Successfully Uploaded!');
+                }).on('httpUploadProgress', function (progress) {
+                    var uploaded = parseInt((progress.loaded * 100) / progress.total);
+                    $("progress").attr('value', uploaded);
+                });
+            }
+        };
+    </script>
+
+
+
+
+
     <script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
     <script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
     <script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
@@ -29,27 +80,42 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <h2>Smart Photo Album</h2>
+            <h2>Smart Album</h2>
+            <input type="file" id="fileUpload">
+            <button onclick="s3upload()">Submit</button>
         </div>
-        <div class="col-md-6">
-            <div class="input-group mb-3">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="inputGroupFile02">
-                    <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02" id="photoLabel">Choose
-                        Photo</label>
-                </div>
-            </div>
-        </div>
+
+        <!--        <div class="col-md-6">-->
+        <!--            <div class="input-group mb-3">-->
+        <!--                <div class="custom-file">-->
+        <!--                    <input type="file" class="custom-file-input" id="inputGroupFile02">-->
+        <!--                    <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02" id="photoLabel">Upload-->
+        <!--                        Photo</label>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+
+
+        <!--        <div>-->
+        <!--            <input type="file" id="fileUpload">-->
+        <!--        </div>-->
+        <!--        <div>-->
+        <!--            <button onclick="s3upload()">Submit</button>-->
+        <!--        </div>-->
+        <!--        <progress max=”100” value=”0”></progress>-->
+
+
     </div>
 
     <img id='img-upload' />
 
     <div class="input-group mb-3">
-        <input type="text" class="form-control" id="searchInput" placeholder="Try - search boy" aria-label="Recipient's username"
+        <input type="text" class="form-control" id="searchInput" placeholder="What are you looking for?" aria-label="Recipient's username"
                aria-describedby="button-addon2">
 
         <div class="input-group-append">
-            <button  onclick="searchImages()" class="btn btn-outline-secondary" type="button" id="searchButton">Search Photo</button>
+            <button  onclick="searchImages()" class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
         </div>
 
         <form action="javascript:void(0);">
@@ -72,6 +138,3 @@
 </body>
 <script src="script.js"></script>
 </html>
-
-
-

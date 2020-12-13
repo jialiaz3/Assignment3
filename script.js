@@ -13,10 +13,8 @@ function searchImages() {
         apigClient.searchGet({ "q": searchQuery })
             .then(function (result) {
                 console.log("==============================")
-                console.log("response is: ", result);
                 console.log("response data is ", result.data);
-                console.log("response data length is", result.data.length);
-                console.log("========================");
+                console.log("==============================");
                 showImages(result.data);
             }).catch(function (result) {
             alert("Cannot find label.");
@@ -46,7 +44,6 @@ inputBox.addEventListener("keyup", function (event) {
 });
 
 
-//for voice search
 
 $(function () {
     // check for support (webkit only)
@@ -144,58 +141,5 @@ function capitalize(str) {
 }
 
 
-//image upload
 
-// $(document).on('change', '#inputGroupFile02', function () {
-//
-//     let input = $(this),
-//         label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-//     input.trigger('fileselect', [label]);
-//
-//     let labalElem = document.getElementById("photoLabel");
-//     labalElem.innerText = label
-//
-//     readURL(this, label);
-//
-// });
-//
-//
-// function readURL(input, label) {
-//
-//     if (input.files && input.files[0]) {
-//         let reader = new FileReader();
-//         reader.onload = function (e) {
-//             upload(reader.result, label );
-//         }
-//         reader.onerror = function () {
-//             console.log(`Error in reader`);
-//         };
-//         reader.readAsBinaryString(input.files[0]);
-//     }
-// }
-//
-// function upload(image, imglabel) {
-//
-//     let imageNameS3 = `${imglabel.replace(/\.[^/.]+$/, "")}-${Date.now()}.${imglabel.split(".").pop()}`
-//
-//     let params = { "bucket":"hw3b2", "key": imageNameS3, "Content-Type": "image/***" };
-//
-//     let additionalParams = {
-//         headers: {
-//             "Content-Type": "image/***",
-//         }
-//     };
-//
-//     apigClient.uploadPut(params, btoa(image), additionalParams)
-//         .then(function (result) {
-//             console.log(result);
-//             alert(`Image ${imglabel},has been uploded`);
-//             document.getElementById("photoLabel").value  = '';
-//             document.getElementById("photoLabel").innerText = '';
-//
-//         }).catch(function (err) {
-//         console.log(err);
-//         alert(`Error -${err}`);
-//     });
-// }
 
